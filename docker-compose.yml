@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  app:
+    image: lissonpsantos2/ubuntu-phps:latest
+    restart: always
+    container_name: $APP_NAME
+    volumes:
+      - ./:/home/project-folder
+    command: bash -c "selectphp 8.0 && apachelinker /home/project-folder/public && tail -f /tmp/dev.log"
+    ports:
+      - $APP_PORT:80
