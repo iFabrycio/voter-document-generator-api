@@ -20,3 +20,4 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('events/{event}/documents', [DocumentController::class, 'get']);
+Route::get('events/{event}/documents/{voter}/pdf', [DocumentController::class, 'showAsPdf']);
