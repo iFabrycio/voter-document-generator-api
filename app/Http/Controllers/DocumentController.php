@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Consumers\PanagoraConsumer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Crypt;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Exception;
 
 class DocumentController extends Controller
 {
@@ -52,13 +55,47 @@ class DocumentController extends Controller
             ];
         }
 
-        $response = $this->panagora_api->makeConcurrentRequests($panagora_request_paths, 'GET');
-        //Criar uma lista com os links para a geracao dos documentos
+        $response = collect($this->panagora_api->makeConcurrentRequests($panagora_request_paths, 'GET'))->values();
+
+        $links = $response->map(function ($voter) use ($event) {
+            return [
+                'name' => $voter->nome,
+                'document_url' => url("/api/events/$event/documents/{$voter->id}/pdf?data=") . Crypt::encrypt($voter)
+            ];
+        });
+
         return response([
             'success' => true,
             'actual_page' => $page,
             'total_pages' => ceil(count($request->voter_ids) / $per_page),
-            'data' => $response,
+            'data' => $links,
         ], 200);
+    }
+
+    public function showAsPdf(Request $request, $event, $voter_id)
+    {
+        $validation = Validator::make($request->all(), [
+            'data' => 'required'
+        ]);
+
+        if ($validation->fails()) {
+            return response([
+                'success' => false,
+                'error' => $validation->errors()
+            ], 400);
+        }
+
+        try {
+            $voter_data = collect(Crypt::decrypt($request->data))->toArray();
+        } catch (Exception $e) {
+            return response([
+                'success' => false,
+                'error' => 'invalid data'
+            ], 400);
+        }
+
+        $pdf = Pdf::loadView('layouts.document', ['voter_data' => $voter_data]);
+
+        return $pdf->download("$voter_id-$event.pdf");
     }
 }
