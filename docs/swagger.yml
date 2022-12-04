@@ -1,0 +1,135 @@
+swagger: '2.0'
+host: localhost:10000
+basePath: /api/
+schemes:
+- https
+- http
+info:
+  version: 1.0.0
+  title: Voter Document Generator Api
+  description: Documentação de API de consumo da assembleia-api do sistema Panagora
+tags:
+- name: events
+  description: Rotas de informacoes dos votantes de um determinado evento
+paths:
+  "/events/{event}/documents":
+    post:
+      tags:
+      - events
+      summary: Lista os links para download dos documentos para cada votante requerido
+      parameters:
+      - in: path
+        name: event
+        description: Id do evento
+        required: true
+        type: integer
+        example: 1234
+
+      - in: body
+        name: voter_ids
+        description: IDs dos usuários votantes
+        required: true
+        type: object
+        example: {"voter_ids": [12345, 23456, 34567]}
+
+      - in: query
+        name: page
+        description: Página desejada
+        required: false
+        type: integer
+
+      - in: query
+        name: per_page
+        description: Número de itens por página
+        required: false
+        type: integer
+
+      description: Verifica a existencia dos usuários e então retorna o link para o download dos seus documentos.
+      responses:
+        '200':
+          description: Listagem bem-sucedida.
+          schema:
+            type: object
+            properties:
+              sucess:
+                type: bool
+              actual_page:
+                type: number
+              total_pages:
+                type: number
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    document_url:
+                      type: string
+            example:
+              success: true
+              actual_page: 1
+              total_pages: 20
+              data:
+              - name: Agatha Ribeiro
+                document_url: https://m2wf-test.ifabrycio.dev/api/events/123/documents/456/pdf?data=eyJpdiI6IlhIZ1NYY2JBU2M3VGho...
+        '400':
+          description: Houve um erro nos parametros informados.
+          schema:
+            type: object
+            properties:
+              sucess:
+                type: bool
+              errors:
+                type: object
+            example:
+              success: false
+              errors:
+              - page:
+                - The page must be at least 1.
+
+
+  "/events/{event}/documents/{voter}/pdf":
+    post:
+      tags:
+      - events
+      summary: Documento gerado de um votante
+      parameters:
+      - in: path
+        name: event
+        description: Id do evento
+        required: true
+        type: integer
+        example: 1234
+
+      - in: path
+        name: voter
+        description: Id do votante
+        required: true
+        type: integer
+        example: 567890
+
+      - in: query
+        name: data
+        required: false
+        type: string
+      description: Obtém os dados de um determinado votante e os retorna em um documento PDF
+      responses:
+        '200':
+          description: Geração bem-sucedida.
+          content: application/pdf
+          schema:
+            type:  application/pdf
+
+        '400':
+          description: Houve um erro nos parametros informados.
+          schema:
+            type: object
+            properties:
+              sucess:
+                type: bool
+              error:
+                type: string
+            example:
+              success: false
+              error: invalid data
