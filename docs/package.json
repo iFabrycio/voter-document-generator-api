@@ -1,0 +1,22 @@
+{
+  "name": "docs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prod": "NODE_ENV=production npm run serve",
+    "serve": "babel-node index.js",
+    "dev": "npm run serve",
+    "watch": "nodemon --exec npm run dev"
+  },
+  "devDependencies": {
+    "@babel/node": "^7.20.5",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "http": "^0.0.1-security",
+    "swagger-ui-express": "^4.6.0",
+    "yamljs": "^0.3.0"
+  }
+}
