@@ -55,20 +55,22 @@ class DocumentController extends Controller
             ];
         }
 
-        $response = collect($this->panagora_api->makeConcurrentRequests($panagora_request_paths, 'GET'))->values();
+        $response = collect($this->panagora_api->makeConcurrentRequests($panagora_request_paths, 'GET'));
 
         $links = $response->map(function ($voter) use ($event) {
-            return [
-                'name' => $voter->nome,
-                'document_url' => url("/api/events/$event/documents/{$voter->id}/pdf?data=") . Crypt::encrypt($voter)
-            ];
+            if (property_exists($voter, 'id')) {
+                return [
+                    'name' => $voter->nome,
+                    'document_url' => url("/api/events/$event/documents/{$voter->id}/pdf?data=") . Crypt::encrypt($voter)
+                ];
+            }
         });
 
         return response([
             'success' => true,
             'actual_page' => $page,
             'total_pages' => ceil(count($request->voter_ids) / $per_page),
-            'data' => $links,
+            'data' => $links->filter()->values(),
         ], 200);
     }
 
