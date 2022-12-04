@@ -19,5 +19,5 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('events/{event}/documents', [DocumentController::class, 'get']);
-Route::get('events/{event}/documents/{voter}/pdf', [DocumentController::class, 'showAsPdf']);
+Route::post('events/{event}/documents', [DocumentController::class, 'get']);
+Route::post('events/{event}/documents/{voter}/pdf', [DocumentController::class, 'showAsPdf']);
