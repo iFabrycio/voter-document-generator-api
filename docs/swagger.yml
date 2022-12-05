@@ -90,7 +90,7 @@ paths:
 
 
   "/events/{event}/documents/{voter}/pdf":
-    post:
+    get:
       tags:
       - events
       summary: Documento gerado de um votante
