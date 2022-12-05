@@ -29,7 +29,11 @@ jobs:
     # - name: registering ssh
     #   run: ssh-add < (echo "${{ secrets.SSH_PRIVATE_KEY }}")
     - uses: actions/checkout@v3
-
+    
+    - name: Creating ssh config file
+      run: mkdir -p ~/.ssh
+    - name: Setting deploy configuration
+      run: echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - name: updating server commit
       run: ssh cicd@${{ secrets.PRODUCTION_IP }} 'cd /app/voter && echo "${{ secrets.ENV_FILE }}" > .env && git pull'
 
