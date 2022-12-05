@@ -10,7 +10,7 @@ jobs:
   test-application:
     runs-on: ubuntu-latest
     steps:
-    - uses: lissonpsantos2/php@8.1.2-minimum-laravel
+    - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
     - uses: actions/checkout@v3
 
     - name: Copying .env
@@ -28,6 +28,8 @@ jobs:
     steps:
     # - name: registering ssh
     #   run: ssh-add < (echo "${{ secrets.SSH_PRIVATE_KEY }}")
+    - uses: actions/checkout@v3
+
     - name: updating server commit
       run: ssh -i cicd@${{ secrets.PRODUCTION_IP }} -t 'cd /app/voter && echo "${{ secrets.ENV_FILE }}" > .env && git pull'
 
