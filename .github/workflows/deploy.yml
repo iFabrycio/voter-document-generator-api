@@ -1,4 +1,4 @@
-name: application-ci
+name: application-ci-test-deploy
 
 on:
   push:
@@ -23,6 +23,7 @@ jobs:
       run: vendor/bin/phpunit
 
   release:
+    needs: test-application
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
