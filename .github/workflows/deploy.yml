@@ -30,11 +30,11 @@ jobs:
     #   run: ssh-add < (echo "${{ secrets.SSH_PRIVATE_KEY }}")
     - uses: actions/checkout@v3
     
-    - name: add private key
-      run: eval $(ssh-agent -s)
+    #- name: add private key
+    #  run: eval $(ssh-agent -s)
       
-    - name: add private key - 2
-      run: ssh-add <(echo ${{ secrets.SERVER_PRIVATE_KEY }})
+    #- name: add private key - 2
+    #  run: ssh-add <(echo ${{ secrets.SERVER_PRIVATE_KEY }})
     
     - name: Creating ssh config file
       run: mkdir -p ~/.ssh
