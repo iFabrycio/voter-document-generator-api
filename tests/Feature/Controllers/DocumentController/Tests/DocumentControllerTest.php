@@ -62,7 +62,7 @@ class ExampleTest extends TestCase
             $encrypted_data = '?data=' . Crypt::encrypt($input['data']);
         }
 
-        $response = $this->call('POST', "api/events/$event_id/documents/$voter_id/pdf" . $encrypted_data);
+        $response = $this->call('GET', "api/events/$event_id/documents/$voter_id/pdf" . $encrypted_data);
         $response->assertStatus($expected_output['status_code']);
         if ($expected_output['status_code'] == 200) {
             $response->assertDownload($expected_output['filename']);
