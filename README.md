@@ -19,6 +19,9 @@ I tried to set up a reverse proxy with nginx that points two urls, onde for docs
 The API is built with Laravel in its latest version, there's no Database beacuse its not necessary for the purpose os this task.
 The Documentation server is a NODE js server application running swagger UI inside the project (but in separated containers), from there you can use all the API.
 
+#### Identified errors fixeds
+[07-12-22 @ 19:38] Error 500 on invalid event, api throws function property_exists() expected object, null given....
+
 ### Particularities
 I like to separared the responsability of the things, so i created a new folder called Consumers that hosts the PANAGORAConsumer.php and its responsible to manage the request for thirds parties.
 
