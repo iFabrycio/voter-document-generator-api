@@ -58,7 +58,7 @@ class DocumentController extends Controller
         $response = collect($this->panagora_api->makeConcurrentRequests($panagora_request_paths, 'GET'));
 
         $links = $response->map(function ($voter) use ($event) {
-            if (property_exists($voter, 'id')) {
+            if (isset($voter) && property_exists($voter, 'id')) {
                 return [
                     'name' => $voter->nome,
                     'document_url' => url("/api/events/$event/documents/{$voter->id}/pdf?data=") . Crypt::encrypt($voter)

@@ -2,7 +2,6 @@ swagger: '2.0'
 host: 161.35.180.13:10000
 basePath: /api/
 schemes:
-- https
 - http
 info:
   version: 1.0.0
