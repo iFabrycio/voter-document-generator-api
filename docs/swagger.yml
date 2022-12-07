@@ -2,7 +2,6 @@ swagger: '2.0'
 host: localhost:10000
 basePath: /api/
 schemes:
-- https
 - http
 info:
   version: 1.0.0
